@@ -57,6 +57,7 @@
 
 
     <!-- 基本ステータス -->
+
     <p>
         STR：
         <span id="strValue">-</span>
@@ -241,7 +242,6 @@
                 const className =
                     jobSelect.value;
 
-
                 const jobType =
                     jobTypeSelect.value;
 
@@ -307,7 +307,7 @@
 
 
                     /*
-                     * Supabaseから返ってきたJSON
+                     * SupabaseからJSONを取得
                      */
 
                     const data =
@@ -315,24 +315,24 @@
 
 
                     /*
-                     * デバッグ用
-                     *
-                     * 今はSupabaseから返ってきた
-                     * データをそのまま表示します。
+                     * Supabase側のエラー確認
                      */
 
-                    strValue.textContent =
-                        JSON.stringify(data);
+                    if (data.error) {
+
+                        throw new Error(
+                            data.error
+                        );
+
+                    }
 
 
                     /*
-                     * ブラウザのConsoleにも表示
+                     * STRを表示
                      */
 
-                    console.log(
-                        "Supabase response:",
-                        data
-                    );
+                    strValue.textContent =
+                        data.str;
 
 
                 } catch (error) {
@@ -342,14 +342,8 @@
                         error
                     );
 
-
-                    /*
-                     * エラー内容を画面に表示
-                     */
-
                     strValue.textContent =
-                        "取得失敗: " +
-                        error.message;
+                        "取得失敗";
 
                 }
 
