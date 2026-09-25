@@ -10,26 +10,146 @@
 
     <h1>Xen Rebirth Status Simulator</h1>
 
-    <label for="job">職業：</label>
+    <!-- 基本系統 -->
+    <label for="jobType">基本職系統：</label>
 
-    <select id="job">
-        <option value="">-- 職業を選択 --</option>
-        <option value="fighter">Fighter</option>
+    <select id="jobType">
+        <option value="">-- 系統を選択 --</option>
+        <option value="knight">Knight</option>
         <option value="rogue">Rogue</option>
         <option value="mage">Mage</option>
         <option value="cleric">Cleric</option>
+        <option value="archer">Archer</option>
+        <option value="templar">Templar</option>
     </select>
 
-    <p>選択した職業：<span id="selectedJob">なし</span></p>
+    <br><br>
+
+    <!-- クラス -->
+    <label for="job">クラス：</label>
+
+    <select id="job" disabled>
+        <option value="">-- まず系統を選択 --</option>
+    </select>
+
+    <p>
+        選択したクラス：
+        <span id="selectedJob">なし</span>
+    </p>
+
 
     <script>
+
+        // 系統ごとのクラス
+        const jobData = {
+            knight: [
+                "Squire",
+                "Knight",
+                "Warrior",
+                "Warlord"
+            ],
+
+            rogue: [
+                "Neophyte",
+                "Rogue",
+                "Assassin",
+                "Shadow_Master"
+            ],
+
+            mage: [
+                "Apprentice",
+                "Mage",
+                "Wizard",
+                "Archmage"
+            ],
+
+            cleric: [
+                "Acolyte",
+                "Cleric",
+                "Priest",
+                "Paladin"
+            ],
+
+            archer: [
+                "Scout",
+                "Archer",
+                "Ranger",
+                "Archer_Lord"
+            ],
+
+            templar: [
+                "Disciple",
+                "Templar",
+                "Holy_Avanger",
+                "Saint_Guardian"
+            ]
+        };
+
+
+        const jobTypeSelect = document.getElementById("jobType");
         const jobSelect = document.getElementById("job");
         const selectedJob = document.getElementById("selectedJob");
 
-        jobSelect.addEventListener("change", function() {
-            selectedJob.textContent =
-                jobSelect.options[jobSelect.selectedIndex].text;
+
+        // 基本職系統を選択したとき
+        jobTypeSelect.addEventListener("change", function() {
+
+            const selectedType = jobTypeSelect.value;
+
+            // クラス欄を一旦リセット
+            jobSelect.innerHTML = "";
+
+            selectedJob.textContent = "なし";
+
+            // 系統が未選択なら無効化
+            if (selectedType === "") {
+
+                jobSelect.disabled = true;
+
+                const option = document.createElement("option");
+                option.textContent = "-- まず系統を選択 --";
+                jobSelect.appendChild(option);
+
+                return;
+            }
+
+
+            // 系統が選択されたら有効化
+            jobSelect.disabled = false;
+
+            // 最初の案内
+            const firstOption = document.createElement("option");
+            firstOption.value = "";
+            firstOption.textContent = "-- クラスを選択 --";
+            jobSelect.appendChild(firstOption);
+
+
+            // 該当する4クラスを追加
+            jobData[selectedType].forEach(function(job) {
+
+                const option = document.createElement("option");
+
+                option.value = job;
+                option.textContent = job;
+
+                jobSelect.appendChild(option);
+            });
+
         });
+
+
+        // クラスを選択したとき
+        jobSelect.addEventListener("change", function() {
+
+            if (jobSelect.value === "") {
+                selectedJob.textContent = "なし";
+            } else {
+                selectedJob.textContent =
+                    jobSelect.options[jobSelect.selectedIndex].text;
+            }
+
+        });
+
     </script>
 
 </body>
