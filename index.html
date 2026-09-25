@@ -1,13 +1,36 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xen Rebirth Status Simulator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xen Rebirth Status Simulator</title>
 </head>
+
 <body>
-  <h1>Xen Rebirth Status Simulator</h1>
-  <p>ステータスシミュレーター制作中！</p>
+
+    <h1>Xen Rebirth Status Simulator</h1>
+
+    <label for="job">職業：</label>
+
+    <select id="job">
+        <option value="">-- 職業を選択 --</option>
+        <option value="fighter">Fighter</option>
+        <option value="rogue">Rogue</option>
+        <option value="mage">Mage</option>
+        <option value="cleric">Cleric</option>
+    </select>
+
+    <p>選択した職業：<span id="selectedJob">なし</span></p>
+
+    <script>
+        const jobSelect = document.getElementById("job");
+        const selectedJob = document.getElementById("selectedJob");
+
+        jobSelect.addEventListener("change", function() {
+            selectedJob.textContent =
+                jobSelect.options[jobSelect.selectedIndex].text;
+        });
+    </script>
+
 </body>
 </html>
