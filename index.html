@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,20 +11,26 @@
 
     <h1>Xen Rebirth Status Simulator</h1>
 
-    <!-- 基本系統 -->
+
+    <!-- 基本職系統 -->
     <label for="jobType">基本職系統：</label>
 
     <select id="jobType">
         <option value="">-- 系統を選択 --</option>
+
         <option value="knight">Knight</option>
         <option value="rogue">Rogue</option>
         <option value="mage">Mage</option>
         <option value="cleric">Cleric</option>
         <option value="archer">Archer</option>
         <option value="templar">Templar</option>
+
     </select>
 
-    <br><br>
+
+    <br>
+    <br>
+
 
     <!-- クラス -->
     <label for="job">クラス：</label>
@@ -32,16 +39,35 @@
         <option value="">-- まず系統を選択 --</option>
     </select>
 
+
+    <br>
+    <br>
+
+
+    <!-- 選択したクラス -->
     <p>
         選択したクラス：
         <span id="selectedJob">なし</span>
     </p>
 
 
+    <!-- 基本ステータス -->
+    <p>
+        STR：
+        <span id="strValue">-</span>
+    </p>
+
+
     <script>
 
-        // 系統ごとのクラス
+        /*
+         * ========================================
+         * クラスデータ
+         * ========================================
+         */
+
         const jobData = {
+
             knight: [
                 "Squire",
                 "Knight",
@@ -83,74 +109,211 @@
                 "Holy_Avanger",
                 "Saint_Guardian"
             ]
+
         };
 
 
-        const jobTypeSelect = document.getElementById("jobType");
-        const jobSelect = document.getElementById("job");
-        const selectedJob = document.getElementById("selectedJob");
+        /*
+         * ========================================
+         * HTML要素
+         * ========================================
+         */
+
+        const jobTypeSelect =
+            document.getElementById("jobType");
+
+        const jobSelect =
+            document.getElementById("job");
+
+        const selectedJob =
+            document.getElementById("selectedJob");
+
+        const strValue =
+            document.getElementById("strValue");
 
 
-        // 基本職系統を選択したとき
-        jobTypeSelect.addEventListener("change", function() {
+        /*
+         * ========================================
+         * 基本職系統を選択
+         * ========================================
+         */
 
-            const selectedType = jobTypeSelect.value;
+        jobTypeSelect.addEventListener("change", function () {
 
-            // クラス欄を一旦リセット
+            const selectedType =
+                jobTypeSelect.value;
+
+
+            // クラス欄をリセット
             jobSelect.innerHTML = "";
 
             selectedJob.textContent = "なし";
 
-            // 系統が未選択なら無効化
+            strValue.textContent = "-";
+
+
+            // 系統が未選択
             if (selectedType === "") {
 
                 jobSelect.disabled = true;
 
-                const option = document.createElement("option");
-                option.textContent = "-- まず系統を選択 --";
+                const option =
+                    document.createElement("option");
+
+                option.textContent =
+                    "-- まず系統を選択 --";
+
                 jobSelect.appendChild(option);
 
                 return;
             }
 
 
-            // 系統が選択されたら有効化
+            // クラス欄を有効化
             jobSelect.disabled = false;
 
+
             // 最初の案内
-            const firstOption = document.createElement("option");
+            const firstOption =
+                document.createElement("option");
+
             firstOption.value = "";
-            firstOption.textContent = "-- クラスを選択 --";
+
+            firstOption.textContent =
+                "-- クラスを選択 --";
+
             jobSelect.appendChild(firstOption);
 
 
-            // 該当する4クラスを追加
-            jobData[selectedType].forEach(function(job) {
+            // 該当するクラスを追加
+            jobData[selectedType].forEach(function (job) {
 
-                const option = document.createElement("option");
+                const option =
+                    document.createElement("option");
 
                 option.value = job;
+
                 option.textContent = job;
 
                 jobSelect.appendChild(option);
+
             });
 
         });
 
 
-        // クラスを選択したとき
-        jobSelect.addEventListener("change", function() {
+        /*
+         * ========================================
+         * クラスを選択
+         * ========================================
+         */
 
-            if (jobSelect.value === "") {
-                selectedJob.textContent = "なし";
-            } else {
+        jobSelect.addEventListener(
+            "change",
+            async function () {
+
+                // クラス未選択
+                if (jobSelect.value === "") {
+
+                    selectedJob.textContent =
+                        "なし";
+
+                    strValue.textContent =
+                        "-";
+
+                    return;
+                }
+
+
+                const className =
+                    jobSelect.value;
+
+
                 selectedJob.textContent =
-                    jobSelect.options[jobSelect.selectedIndex].text;
-            }
+                    jobSelect.options[
+                        jobSelect.selectedIndex
+                    ].text;
 
-        });
+
+                strValue.textContent =
+                    "読み込み中...";
+
+
+                /*
+                 * ========================================
+                 * Supabase APIへ問い合わせ
+                 * ========================================
+                 */
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "https://vlskdwruzfribwufxkbn.supabase.co/functions/v1/get-job-data",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+
+                                    job_type:
+                                        jobTypeSelect.value,
+
+                                    class_name:
+                                        className
+
+                                })
+                            }
+                        );
+
+
+                    /*
+                     * Supabaseから返ってきたデータ
+                     */
+
+                    const data =
+                        await response.json();
+
+
+                    /*
+                     * エラー確認
+                     */
+
+                    if (data.error) {
+
+                        throw new Error(
+                            data.error
+                        );
+
+                    }
+
+
+                    /*
+                     * STRを表示
+                     */
+
+                    strValue.textContent =
+                        data.str;
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    strValue.textContent =
+                        "取得失敗";
+
+                }
+
+            }
+        );
 
     </script>
 
 </body>
+
 </html>
