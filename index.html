@@ -16,6 +16,7 @@
     <label for="jobType">基本職系統：</label>
 
     <select id="jobType">
+
         <option value="">-- 系統を選択 --</option>
 
         <option value="knight">Knight</option>
@@ -36,7 +37,11 @@
     <label for="job">クラス：</label>
 
     <select id="job" disabled>
-        <option value="">-- まず系統を選択 --</option>
+
+        <option value="">
+            -- まず系統を選択 --
+        </option>
+
     </select>
 
 
@@ -59,6 +64,7 @@
 
 
     <script>
+
 
         /*
          * ========================================
@@ -138,68 +144,75 @@
          * ========================================
          */
 
-        jobTypeSelect.addEventListener("change", function () {
+        jobTypeSelect.addEventListener(
+            "change",
+            function () {
 
-            const selectedType =
-                jobTypeSelect.value;
-
-
-            // クラス欄をリセット
-            jobSelect.innerHTML = "";
-
-            selectedJob.textContent = "なし";
-
-            strValue.textContent = "-";
+                const selectedType =
+                    jobTypeSelect.value;
 
 
-            // 系統が未選択
-            if (selectedType === "") {
+                // クラス欄をリセット
+                jobSelect.innerHTML = "";
 
-                jobSelect.disabled = true;
+                selectedJob.textContent =
+                    "なし";
 
-                const option =
+                strValue.textContent =
+                    "-";
+
+
+                // 系統が未選択
+                if (selectedType === "") {
+
+                    jobSelect.disabled = true;
+
+                    const option =
+                        document.createElement("option");
+
+                    option.textContent =
+                        "-- まず系統を選択 --";
+
+                    jobSelect.appendChild(option);
+
+                    return;
+                }
+
+
+                // クラス欄を有効化
+                jobSelect.disabled = false;
+
+
+                // 最初の案内
+                const firstOption =
                     document.createElement("option");
 
-                option.textContent =
-                    "-- まず系統を選択 --";
+                firstOption.value = "";
 
-                jobSelect.appendChild(option);
+                firstOption.textContent =
+                    "-- クラスを選択 --";
 
-                return;
+                jobSelect.appendChild(firstOption);
+
+
+                // 該当するクラスを追加
+                jobData[selectedType].forEach(
+                    function (job) {
+
+                        const option =
+                            document.createElement("option");
+
+                        option.value = job;
+
+                        option.textContent = job;
+
+                        jobSelect.appendChild(option);
+
+                    }
+                );
+
             }
-
-
-            // クラス欄を有効化
-            jobSelect.disabled = false;
-
-
-            // 最初の案内
-            const firstOption =
-                document.createElement("option");
-
-            firstOption.value = "";
-
-            firstOption.textContent =
-                "-- クラスを選択 --";
-
-            jobSelect.appendChild(firstOption);
-
-
-            // 該当するクラスを追加
-            jobData[selectedType].forEach(function (job) {
-
-                const option =
-                    document.createElement("option");
-
-                option.value = job;
-
-                option.textContent = job;
-
-                jobSelect.appendChild(option);
-
-            });
-
-        });
+        );
 
 
         /*
@@ -229,12 +242,18 @@
                     jobSelect.value;
 
 
+                const jobType =
+                    jobTypeSelect.value;
+
+
+                // 選択したクラスを表示
                 selectedJob.textContent =
                     jobSelect.options[
                         jobSelect.selectedIndex
                     ].text;
 
 
+                // 読み込み中
                 strValue.textContent =
                     "読み込み中...";
 
@@ -251,6 +270,7 @@
                         await fetch(
                             "https://vlskdwruzfribwufxkbn.supabase.co/functions/v1/get-job-data",
                             {
+
                                 method: "POST",
 
                                 headers: {
@@ -261,18 +281,33 @@
                                 body: JSON.stringify({
 
                                     job_type:
-                                        jobTypeSelect.value,
+                                        jobType,
 
                                     class_name:
                                         className
 
                                 })
+
                             }
                         );
 
 
                     /*
-                     * Supabaseから返ってきたデータ
+                     * HTTPエラー確認
+                     */
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "HTTP Error: " +
+                            response.status
+                        );
+
+                    }
+
+
+                    /*
+                     * Supabaseから返ってきたJSON
                      */
 
                     const data =
@@ -280,37 +315,47 @@
 
 
                     /*
-                     * エラー確認
-                     */
-
-                    if (data.error) {
-
-                        throw new Error(
-                            data.error
-                        );
-
-                    }
-
-
-                    /*
-                     * STRを表示
+                     * デバッグ用
+                     *
+                     * 今はSupabaseから返ってきた
+                     * データをそのまま表示します。
                      */
 
                     strValue.textContent =
-                        data.str;
+                        JSON.stringify(data);
+
+
+                    /*
+                     * ブラウザのConsoleにも表示
+                     */
+
+                    console.log(
+                        "Supabase response:",
+                        data
+                    );
 
 
                 } catch (error) {
 
-                    console.error(error);
+                    console.error(
+                        "Supabase error:",
+                        error
+                    );
+
+
+                    /*
+                     * エラー内容を画面に表示
+                     */
 
                     strValue.textContent =
-                        "取得失敗";
+                        "取得失敗: " +
+                        error.message;
 
                 }
 
             }
         );
+
 
     </script>
 
