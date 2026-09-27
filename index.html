@@ -2,356 +2,2062 @@
 <html lang="ja">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Xen Rebirth Status Simulator</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            padding: 30px;
+
+            background: #363a40;
+
+            color: #eeeeee;
+
+            font-family:
+                Arial,
+                "Yu Gothic",
+                Meiryo,
+                sans-serif;
+
+            font-size: 14px;
+
+        }
+
+
+        /*
+         * ========================================
+         * 全体
+         * ========================================
+         */
+
+        .simulator {
+
+            width: 100%;
+
+            max-width: 1180px;
+
+            margin: 0 auto;
+
+        }
+
+
+        /*
+         * ========================================
+         * 上部
+         * ========================================
+         */
+
+        .top-area {
+
+            display: grid;
+
+            grid-template-columns:
+                475px
+                1fr;
+
+            gap: 40px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .character-info {
+
+            border: 1px solid #777;
+
+            background: #44484e;
+
+        }
+
+
+        .info-row {
+
+            display: grid;
+
+            grid-template-columns:
+                100px
+                185px
+                95px
+                95px;
+
+            height: 34px;
+
+            border-bottom: 1px solid #666;
+
+        }
+
+
+        .info-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .info-label {
+
+            display: flex;
+
+            align-items: center;
+
+            padding-left: 10px;
+
+            background: #34383e;
+
+            font-weight: bold;
+
+            font-style: italic;
+
+            border-right: 1px solid #777;
+
+        }
+
+
+        .info-value {
+
+            padding: 0;
+
+            border-right: 1px solid #777;
+
+        }
+
+
+        .info-value select {
+
+            width: 100%;
+
+            height: 100%;
+
+            border: none;
+
+            padding: 0 10px;
+
+            background: #eeeeee;
+
+            color: #222;
+
+            font-size: 14px;
+
+        }
+
+
+        .lp-label {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #34383e;
+
+            font-weight: bold;
+
+            border-right: 1px solid #777;
+
+        }
+
+
+        .lp-value {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #eeeeee;
+
+            color: #222;
+
+        }
+
+
+        /*
+         * ========================================
+         * メイン
+         * ========================================
+         */
+
+        .main-area {
+
+            display: grid;
+
+            grid-template-columns:
+                570px
+                1fr;
+
+            gap: 40px;
+
+        }
+
+
+        /*
+         * ========================================
+         * 左側
+         * ========================================
+         */
+
+        .left-area {
+
+            min-width: 0;
+
+        }
+
+
+        .equipment-section {
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .equipment-row {
+
+            display: grid;
+
+            grid-template-columns:
+                70px
+                30px
+                270px
+                1fr;
+
+            min-height: 38px;
+
+            border-bottom: 1px dotted #777;
+
+        }
+
+
+        .equipment-label {
+
+            display: flex;
+
+            align-items: center;
+
+            padding-left: 8px;
+
+            font-weight: bold;
+
+            font-style: italic;
+
+            background: #34383e;
+
+            border-left: 1px solid #777;
+
+            border-right: 1px solid #777;
+
+        }
+
+
+        .equipment-icon {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #25282d;
+
+            border-right: 1px solid #777;
+
+            font-size: 18px;
+
+        }
+
+
+        .equipment-select {
+
+            min-width: 0;
+
+        }
+
+
+        .equipment-select select {
+
+            width: 100%;
+
+            height: 38px;
+
+            border: none;
+
+            padding: 0 8px;
+
+            background: #eeeeee;
+
+            color: #222;
+
+            font-size: 13px;
+
+        }
+
+
+        .equipment-effect {
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 8px;
+
+            color: #bfc4cb;
+
+            font-size: 12px;
+
+            font-style: italic;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+        }
+
+
+        /*
+         * ========================================
+         * 装備品
+         * ========================================
+         */
+
+        .gear-section {
+
+            margin-top: 24px;
+
+        }
+
+
+        .gear-row {
+
+            display: grid;
+
+            grid-template-columns:
+                70px
+                30px
+                270px
+                70px
+                70px
+                70px;
+
+            min-height: 38px;
+
+            border-bottom: 1px dotted #777;
+
+        }
+
+
+        .gear-select {
+
+            min-width: 0;
+
+        }
+
+
+        .gear-select select {
+
+            width: 100%;
+
+            height: 38px;
+
+            border: none;
+
+            padding: 0 8px;
+
+            background: #eeeeee;
+
+            color: #222;
+
+            font-size: 13px;
+
+        }
+
+
+        .gear-small {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #eeeeee;
+
+            color: #222;
+
+            border-left: 1px solid #777;
+
+            font-size: 12px;
+
+        }
+
+
+        /*
+         * ========================================
+         * 右側
+         * ========================================
+         */
+
+        .right-area {
+
+            min-width: 0;
+
+        }
+
+
+        /*
+         * キャラクター
+         */
+
+        .character-box {
+
+            width: 410px;
+
+            height: 205px;
+
+            margin: 0 auto 28px;
+
+            border: 2px solid #777;
+
+            background: #111;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #777;
+
+            font-size: 14px;
+
+        }
+
+
+        .character-placeholder {
+
+            width: 120px;
+
+            height: 170px;
+
+            border: 1px dashed #777;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            color: #777;
+
+        }
+
+
+        /*
+         * ========================================
+         * ステータス
+         * ========================================
+         */
+
+        .status-area {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr;
+
+            gap: 18px;
+
+            margin-bottom: 28px;
+
+        }
+
+
+        .status-table {
+
+            border: 1px solid #666;
+
+        }
+
+
+        .status-row {
+
+            display: grid;
+
+            grid-template-columns:
+                80px
+                70px
+                1fr;
+
+            height: 36px;
+
+            border-bottom: 1px solid #555;
+
+        }
+
+
+        .status-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .status-name {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #151a3d;
+
+            color: #ffffff;
+
+            font-weight: bold;
+
+            font-style: italic;
+
+            border-right: 1px solid #555;
+
+        }
+
+
+        .status-value {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #eeeeee;
+
+            color: #222;
+
+            border-right: 1px solid #555;
+
+        }
+
+
+        .status-extra {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #34383e;
+
+            color: #eeeeee;
+
+        }
+
+
+        /*
+         * ========================================
+         * 下部ステータス
+         * ========================================
+         */
+
+        .secondary-status {
+
+            width: 100%;
+
+            border: 1px solid #666;
+
+        }
+
+
+        .secondary-row {
+
+            display: grid;
+
+            grid-template-columns:
+                130px
+                90px
+                90px;
+
+            min-height: 36px;
+
+            border-bottom: 1px solid #555;
+
+        }
+
+
+        .secondary-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .secondary-name {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #151a3d;
+
+            color: white;
+
+            font-weight: bold;
+
+            font-style: italic;
+
+        }
+
+
+        .secondary-value {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #eeeeee;
+
+            color: #222;
+
+            border-left: 1px solid #555;
+
+        }
+
+
+        /*
+         * ========================================
+         * スキル欄
+         * ========================================
+         */
+
+        .skill-section {
+
+            margin-top: 24px;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr;
+
+            gap: 10px;
+
+        }
+
+
+        .skill-box {
+
+            border: 1px solid #666;
+
+            min-height: 42px;
+
+            background: #34383e;
+
+        }
+
+
+        .skill-title {
+
+            padding: 7px 10px;
+
+            background: #151a3d;
+
+            font-weight: bold;
+
+            font-style: italic;
+
+        }
+
+
+        .skill-value {
+
+            padding: 8px;
+
+            text-align: center;
+
+        }
+
+
+        /*
+         * ========================================
+         * 共通 select
+         * ========================================
+         */
+
+        select {
+
+            cursor: pointer;
+
+        }
+
+
+        /*
+         * ========================================
+         * レスポンシブ
+         * ========================================
+         */
+
+        @media (max-width: 1000px) {
+
+            body {
+
+                padding: 15px;
+
+            }
+
+
+            .top-area {
+
+                grid-template-columns: 1fr;
+
+                gap: 20px;
+
+            }
+
+
+            .main-area {
+
+                grid-template-columns: 1fr;
+
+                gap: 25px;
+
+            }
+
+
+            .character-box {
+
+                width: 100%;
+
+            }
+
+        }
+
+
+    </style>
+
 </head>
+
 
 <body>
 
-    <h1>Xen Rebirth Status Simulator</h1>
 
+<div class="simulator">
 
-    <!-- 基本職系統 -->
-    <label for="jobType">基本職系統：</label>
 
-    <select id="jobType">
+    <!-- ========================================
+         上部
+         ======================================== -->
 
-        <option value="">-- 系統を選択 --</option>
+    <div class="top-area">
 
-        <option value="knight">Knight</option>
-        <option value="rogue">Rogue</option>
-        <option value="mage">Mage</option>
-        <option value="cleric">Cleric</option>
-        <option value="archer">Archer</option>
-        <option value="templar">Templar</option>
 
-    </select>
+        <div class="character-info">
 
 
-    <br>
-    <br>
+            <div class="info-row">
 
+                <div class="info-label">
+                    系統
+                </div>
 
-    <!-- クラス -->
-    <label for="job">クラス：</label>
+                <div class="info-value">
 
-    <select id="job" disabled>
+                    <select>
 
-        <option value="">
-            -- まず系統を選択 --
-        </option>
+                        <option>Mage</option>
+                        <option>Knight</option>
+                        <option>Rogue</option>
+                        <option>Cleric</option>
+                        <option>Archer</option>
+                        <option>Templar</option>
 
-    </select>
+                    </select>
 
+                </div>
 
-    <br>
-    <br>
+                <div class="lp-label">
+                    合計LP
+                </div>
 
+                <div class="lp-value">
+                    78
+                </div>
 
-    <!-- 選択したクラス -->
-    <p>
-        選択したクラス：
-        <span id="selectedJob">なし</span>
-    </p>
+            </div>
 
 
-    <!-- 基本ステータス -->
+            <div class="info-row">
 
-    <p>
-        STR：
-        <span id="strValue">-</span>
-    </p>
+                <div class="info-label">
+                    Level
+                </div>
 
+                <div class="info-value">
 
-    <script>
+                    <select>
 
+                        <option>60</option>
+                        <option>59</option>
+                        <option>58</option>
+                        <option>57</option>
+                        <option>56</option>
 
-        /*
-         * ========================================
-         * クラスデータ
-         * ========================================
-         */
+                    </select>
 
-        const jobData = {
+                </div>
 
-            knight: [
-                "Squire",
-                "Knight",
-                "Warrior",
-                "Warlord"
-            ],
+                <div class="lp-label">
+                    残りLP
+                </div>
 
-            rogue: [
-                "Neophyte",
-                "Rogue",
-                "Assassin",
-                "Shadow_Master"
-            ],
+                <div class="lp-value">
+                    0
+                </div>
 
-            mage: [
-                "Apprentice",
-                "Mage",
-                "Wizard",
-                "Archmage"
-            ],
+            </div>
 
-            cleric: [
-                "Acolyte",
-                "Cleric",
-                "Priest",
-                "Paladin"
-            ],
 
-            archer: [
-                "Scout",
-                "Archer",
-                "Ranger",
-                "Archer_Lord"
-            ],
+            <div class="info-row">
 
-            templar: [
-                "Disciple",
-                "Templar",
-                "Holy_Avanger",
-                "Saint_Guardian"
-            ]
+                <div class="info-label">
+                    Class
+                </div>
 
-        };
+                <div class="info-value">
 
+                    <select>
 
-        /*
-         * ========================================
-         * HTML要素
-         * ========================================
-         */
+                        <option>Apprentice</option>
+                        <option>Mage</option>
+                        <option>Wizard</option>
+                        <option>Archmage</option>
 
-        const jobTypeSelect =
-            document.getElementById("jobType");
+                    </select>
 
-        const jobSelect =
-            document.getElementById("job");
+                </div>
 
-        const selectedJob =
-            document.getElementById("selectedJob");
+                <div></div>
 
-        const strValue =
-            document.getElementById("strValue");
+                <div></div>
 
+            </div>
 
-        /*
-         * ========================================
-         * 基本職系統を選択
-         * ========================================
-         */
 
-        jobTypeSelect.addEventListener(
-            "change",
-            function () {
+        </div>
 
-                const selectedType =
-                    jobTypeSelect.value;
 
+    </div>
 
-                // クラス欄をリセット
-                jobSelect.innerHTML = "";
 
-                selectedJob.textContent =
-                    "なし";
 
-                strValue.textContent =
-                    "-";
+    <!-- ========================================
+         メイン
+         ======================================== -->
 
+    <div class="main-area">
 
-                // 系統が未選択
-                if (selectedType === "") {
 
-                    jobSelect.disabled = true;
+        <!-- ====================================
+             左側
+             ==================================== -->
 
-                    const option =
-                        document.createElement("option");
+        <div class="left-area">
 
-                    option.textContent =
-                        "-- まず系統を選択 --";
 
-                    jobSelect.appendChild(option);
+            <!-- 装備・補助 -->
 
-                    return;
-                }
+            <div class="equipment-section">
 
 
-                // クラス欄を有効化
-                jobSelect.disabled = false;
+                <div class="equipment-row">
 
+                    <div class="equipment-label">
+                        目
+                    </div>
 
-                // 最初の案内
-                const firstOption =
-                    document.createElement("option");
+                    <div class="equipment-icon">
+                        👁
+                    </div>
 
-                firstOption.value = "";
+                    <div class="equipment-select">
 
-                firstOption.textContent =
-                    "-- クラスを選択 --";
+                        <select>
 
-                jobSelect.appendChild(firstOption);
+                            <option>Pirate's Eye Patch of Skill</option>
 
+                        </select>
 
-                // 該当するクラスを追加
-                jobData[selectedType].forEach(
-                    function (job) {
+                    </div>
 
-                        const option =
-                            document.createElement("option");
+                    <div class="equipment-effect">
+                        SkillCrit +3
+                    </div>
 
-                        option.value = job;
+                </div>
 
-                        option.textContent = job;
 
-                        jobSelect.appendChild(option);
+                <div class="equipment-row">
 
-                    }
-                );
+                    <div class="equipment-label">
+                        顔
+                    </div>
 
-            }
-        );
+                    <div class="equipment-icon">
+                        🔔
+                    </div>
 
+                    <div class="equipment-select">
 
-        /*
-         * ========================================
-         * クラスを選択
-         * ========================================
-         */
+                        <select>
 
-        jobSelect.addEventListener(
-            "change",
-            async function () {
+                            <option>Cat Bell (INT)</option>
 
-                // クラス未選択
-                if (jobSelect.value === "") {
+                        </select>
 
-                    selectedJob.textContent =
-                        "なし";
+                    </div>
 
-                    strValue.textContent =
-                        "-";
+                    <div class="equipment-effect">
+                        INT +12 / 防御 +15
+                    </div>
 
-                    return;
-                }
+                </div>
 
 
-                const className =
-                    jobSelect.value;
+                <div class="equipment-row">
 
-                const jobType =
-                    jobTypeSelect.value;
+                    <div class="equipment-label">
+                        背中
+                    </div>
 
+                    <div class="equipment-icon">
+                        🎀
+                    </div>
 
-                // 選択したクラスを表示
-                selectedJob.textContent =
-                    jobSelect.options[
-                        jobSelect.selectedIndex
-                    ].text;
+                    <div class="equipment-select">
 
+                        <select>
 
-                // 読み込み中
-                strValue.textContent =
-                    "読み込み中...";
+                            <option>Cloak of Love (Female)</option>
 
+                        </select>
 
-                /*
-                 * ========================================
-                 * Supabase APIへ問い合わせ
-                 * ========================================
-                 */
+                    </div>
 
-                try {
+                    <div class="equipment-effect">
+                        防御 +16 / HP +25 / MP +25
+                    </div>
 
-                    const response =
-                        await fetch(
-                            "https://vlskdwruzfribwufxkbn.supabase.co/functions/v1/get-job-data",
-                            {
+                </div>
 
-                                method: "POST",
 
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
+                <div class="equipment-row">
 
-                                body: JSON.stringify({
+                    <div class="equipment-label">
+                        装飾
+                    </div>
 
-                                    job_type:
-                                        jobType,
+                    <div class="equipment-icon">
+                        💎
+                    </div>
 
-                                    class_name:
-                                        className
+                    <div class="equipment-select">
 
-                                })
+                        <select>
 
-                            }
-                        );
+                            <option>Ability Pearl +4</option>
 
+                        </select>
 
-                    /*
-                     * HTTPエラー確認
-                     */
+                    </div>
 
-                    if (!response.ok) {
+                    <div class="equipment-effect">
+                        AGI +4 / 防御 +4
+                    </div>
 
-                        throw new Error(
-                            "HTTP Error: " +
-                            response.status
-                        );
+                </div>
 
-                    }
 
+                <div class="equipment-row">
 
-                    /*
-                     * SupabaseからJSONを取得
-                     */
+                    <div class="equipment-label">
+                    </div>
 
-                    const data =
-                        await response.json();
+                    <div class="equipment-icon">
+                        💎
+                    </div>
 
+                    <div class="equipment-select">
 
-                    /*
-                     * Supabase側のエラー確認
-                     */
+                        <select>
 
-                    if (data.error) {
+                            <option>Ability Pearl +4</option>
 
-                        throw new Error(
-                            data.error
-                        );
+                        </select>
 
-                    }
+                    </div>
 
+                    <div class="equipment-effect">
+                        AGI +4 / 防御 +4
+                    </div>
 
-                    /*
-                     * STRを表示
-                     */
+                </div>
 
-                    strValue.textContent =
-                        data.str;
 
+                <div class="equipment-row">
 
-                } catch (error) {
+                    <div class="equipment-label">
+                    </div>
 
-                    console.error(
-                        "Supabase error:",
-                        error
-                    );
+                    <div class="equipment-icon">
+                        💎
+                    </div>
 
-                    strValue.textContent =
-                        "取得失敗";
+                    <div class="equipment-select">
 
-                }
+                        <select>
 
-            }
-        );
+                            <option>Ability Pearl +4</option>
 
+                        </select>
 
-    </script>
+                    </div>
+
+                    <div class="equipment-effect">
+                        AGI +4 / 防御 +4
+                    </div>
+
+                </div>
+
+
+                <div class="equipment-row">
+
+                    <div class="equipment-label">
+                        触媒
+                    </div>
+
+                    <div class="equipment-icon">
+                        ◼
+                    </div>
+
+                    <div class="equipment-select">
+
+                        <select>
+
+                            <option></option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="equipment-effect"></div>
+
+                </div>
+
+
+                <div class="equipment-row">
+
+                    <div class="equipment-label">
+                        召還
+                    </div>
+
+                    <div class="equipment-icon">
+                        🐱
+                    </div>
+
+                    <div class="equipment-select">
+
+                        <select>
+
+                            <option>防御</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="equipment-effect">
+                        防御 +10
+                    </div>
+
+                </div>
+
+
+                <div class="equipment-row">
+
+                    <div class="equipment-label">
+                    </div>
+
+                    <div class="equipment-icon">
+                        🐱
+                    </div>
+
+                    <div class="equipment-select">
+
+                        <select>
+
+                            <option>回避</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="equipment-effect">
+                        回避 +10
+                    </div>
+
+                </div>
+
+
+                <div class="equipment-row">
+
+                    <div class="equipment-label">
+                        騎乗
+                    </div>
+
+                    <div class="equipment-icon">
+                        🐎
+                    </div>
+
+                    <div class="equipment-select">
+
+                        <select>
+
+                            <option>Felix</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="equipment-effect">
+                        POW +3 / AGI +3 / 移動速度 +1
+                    </div>
+
+                </div>
+
+
+                <div class="equipment-row">
+
+                    <div class="equipment-label">
+                        騎乗補正
+                    </div>
+
+                    <div class="equipment-icon">
+                        🐴
+                    </div>
+
+                    <div class="equipment-select">
+
+                        <select>
+
+                            <option>Basic Lv3 (Defense)</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="equipment-effect">
+                        攻撃 / 魔法攻撃 +9 / 防御 +6
+                    </div>
+
+                </div>
+
+
+                <div class="equipment-row">
+
+                    <div class="equipment-label">
+                        Spa
+                    </div>
+
+                    <div class="equipment-icon">
+                        ◼
+                    </div>
+
+                    <div class="equipment-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="equipment-effect"></div>
+
+                </div>
+
+
+                <div class="equipment-row">
+
+                    <div class="equipment-label">
+                        Party
+                    </div>
+
+                    <div class="equipment-icon">
+                        ◼
+                    </div>
+
+                    <div class="equipment-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="equipment-effect"></div>
+
+                </div>
+
+
+                <div class="equipment-row">
+
+                    <div class="equipment-label">
+                        Roulette
+                    </div>
+
+                    <div class="equipment-icon">
+                        ◼
+                    </div>
+
+                    <div class="equipment-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="equipment-effect"></div>
+
+                </div>
+
+
+                <div class="equipment-row">
+
+                    <div class="equipment-label">
+                        Consumable
+                    </div>
+
+                    <div class="equipment-icon">
+                        ◼
+                    </div>
+
+                    <div class="equipment-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="equipment-effect"></div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ====================================
+                 装備品
+                 ==================================== -->
+
+            <div class="gear-section">
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                        靴
+                    </div>
+
+                    <div class="equipment-icon">
+                        👢
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option>Shoes of the Tree</option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small">
+                        6
+                    </div>
+
+                    <div class="gear-small">
+                        32
+                    </div>
+
+                    <div class="gear-small">
+                        Lv51
+                    </div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                        手袋
+                    </div>
+
+                    <div class="equipment-icon">
+                        🧤
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option>Gloves of Tree</option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small">
+                        6
+                    </div>
+
+                    <div class="gear-small">
+                        33
+                    </div>
+
+                    <div class="gear-small">
+                        Lv52
+                    </div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                        兜
+                    </div>
+
+                    <div class="equipment-icon">
+                        🪖
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option>Helmet of Tree</option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small">
+                        6
+                    </div>
+
+                    <div class="gear-small">
+                        35
+                    </div>
+
+                    <div class="gear-small">
+                        Lv57
+                    </div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                        胸衣
+                    </div>
+
+                    <div class="equipment-icon">
+                        🛡
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option>Armor of Tree</option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small">
+                        6
+                    </div>
+
+                    <div class="gear-small">
+                        40
+                    </div>
+
+                    <div class="gear-small">
+                        Lv59
+                    </div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                        武器R
+                    </div>
+
+                    <div class="equipment-icon">
+                        🪄
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option>Dream Staff [Pow 7]</option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small">
+                        6
+                    </div>
+
+                    <div class="gear-small">
+                        122
+                    </div>
+
+                    <div class="gear-small">
+                        Lv57
+                    </div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                        武器L
+                    </div>
+
+                    <div class="equipment-icon">
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                        Passive
+                    </div>
+
+                    <div class="equipment-icon">
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                    </div>
+
+                    <div class="equipment-icon">
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                        Active
+                    </div>
+
+                    <div class="equipment-icon">
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                    </div>
+
+                    <div class="equipment-icon">
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+
+                </div>
+
+
+                <div class="gear-row">
+
+                    <div class="equipment-label">
+                    </div>
+
+                    <div class="equipment-icon">
+                    </div>
+
+                    <div class="gear-select">
+
+                        <select>
+                            <option></option>
+                        </select>
+
+                    </div>
+
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+                    <div class="gear-small"></div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ====================================
+             右側
+             ==================================== -->
+
+        <div class="right-area">
+
+
+            <!-- キャラクター -->
+
+            <div class="character-box">
+
+                <div class="character-placeholder">
+
+                    CHARACTER<br>
+                    IMAGE
+
+                </div>
+
+            </div>
+
+
+
+            <!-- 基本ステータス -->
+
+            <div class="status-area">
+
+
+                <div class="status-table">
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            POW
+                        </div>
+
+                        <div class="status-value">
+                            7
+                        </div>
+
+                        <div class="status-extra">
+                            3
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            INT
+                        </div>
+
+                        <div class="status-value">
+                            73
+                        </div>
+
+                        <div class="status-extra">
+                            12
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            AGI
+                        </div>
+
+                        <div class="status-value">
+                            1
+                        </div>
+
+                        <div class="status-extra">
+                            15
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            MEN
+                        </div>
+
+                        <div class="status-value">
+                            1
+                        </div>
+
+                        <div class="status-extra">
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            STA
+                        </div>
+
+                        <div class="status-value">
+                            1
+                        </div>
+
+                        <div class="status-extra">
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            WIS
+                        </div>
+
+                        <div class="status-value">
+                            1
+                        </div>
+
+                        <div class="status-extra">
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="status-table">
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            攻撃
+                        </div>
+
+                        <div class="status-value">
+                            12
+                        </div>
+
+                        <div class="status-extra">
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            防御
+                        </div>
+
+                        <div class="status-value">
+                            2
+                        </div>
+
+                        <div class="status-extra">
+                            199
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            魔法攻撃
+                        </div>
+
+                        <div class="status-value">
+                            140
+                        </div>
+
+                        <div class="status-extra">
+                            133
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            魔法防御
+                        </div>
+
+                        <div class="status-value">
+                            2
+                        </div>
+
+                        <div class="status-extra">
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            回避
+                        </div>
+
+                        <div class="status-value">
+                            10
+                        </div>
+
+                        <div class="status-extra">
+                            10
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            攻撃速度
+                        </div>
+
+                        <div class="status-value">
+                            1.3S
+                        </div>
+
+                        <div class="status-extra">
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            移動速度
+                        </div>
+
+                        <div class="status-value">
+                            19
+                        </div>
+
+                        <div class="status-extra">
+                            7
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            命中
+                        </div>
+
+                        <div class="status-value">
+                            85
+                        </div>
+
+                        <div class="status-extra">
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-name">
+                            Crit
+                        </div>
+
+                        <div class="status-value">
+                            2
+                        </div>
+
+                        <div class="status-extra">
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- 下部ステータス -->
+
+            <div class="secondary-status">
+
+
+                <div class="secondary-row">
+
+                    <div class="secondary-name">
+                        Skill Crit
+                    </div>
+
+                    <div class="secondary-value">
+                        2
+                    </div>
+
+                    <div class="secondary-value">
+                        3
+                    </div>
+
+                </div>
+
+
+                <div class="secondary-row">
+
+                    <div class="secondary-name">
+                        最大重量
+                    </div>
+
+                    <div class="secondary-value">
+                        1750
+                    </div>
+
+                    <div class="secondary-value">
+                    </div>
+
+                </div>
+
+
+                <div class="secondary-row">
+
+                    <div class="secondary-name">
+                        HP
+                    </div>
+
+                    <div class="secondary-value">
+                        320
+                    </div>
+
+                    <div class="secondary-value">
+                        25
+                    </div>
+
+                </div>
+
+
+                <div class="secondary-row">
+
+                    <div class="secondary-name">
+                        MP
+                    </div>
+
+                    <div class="secondary-value">
+                        200
+                    </div>
+
+                    <div class="secondary-value">
+                        45
+                    </div>
+
+                </div>
+
+
+                <div class="secondary-row">
+
+                    <div class="secondary-name">
+                        詠唱速度
+                    </div>
+
+                    <div class="secondary-value">
+                        1.4S
+                    </div>
+
+                    <div class="secondary-value">
+                    </div>
+
+                </div>
+
+
+                <div class="secondary-row">
+
+                    <div class="secondary-name">
+                        HP回復量
+                    </div>
+
+                    <div class="secondary-value">
+                    </div>
+
+                    <div class="secondary-value">
+                    </div>
+
+                </div>
+
+
+                <div class="secondary-row">
+
+                    <div class="secondary-name">
+                        MP回復量
+                    </div>
+
+                    <div class="secondary-value">
+                    </div>
+
+                    <div class="secondary-value">
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- Skill / Passive -->
+
+            <div class="skill-section">
+
+
+                <div class="skill-box">
+
+                    <div class="skill-title">
+                        Passive
+                    </div>
+
+                    <div class="skill-value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="skill-box">
+
+                    <div class="skill-title">
+                        Active
+                    </div>
+
+                    <div class="skill-value">
+                        -
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
 
 </body>
 
